@@ -117,22 +117,19 @@ replace the content of `config.json` with it.
   npm i
   ```
 
-- Before starting the dev server, edit the `vite.json` configuration file. The
-  following parameters are available:
+- Copy [`.env.example`](./.env.example) to `.env` and set your Infinity URL:
 
-  - `infinityUrl`: URL of the Pexip Infinity Conferencing Node.
-  - `port`: Port used by the development server.
-  - `brandingPath`: Path of the branding configured in Infinity.
-
-  Example:
-
-  ```json
-  {
-    "infinityUrl": "https://pexipdemo.com",
-    "port": 5173,
-    "brandingPath": "/local-plugin"
-  }
+  ```bash
+  cp .env.example .env
   ```
+
+  - `VITE_INFINITY_TARGET`: Required base URL of your Pexip Infinity server.
+    Requests to `/api` and `/webapp3` are proxied to this server.
+  - `VITE_DEV_SERVER_PORT`: Optional local HTTPS port (default: `5173`).
+
+  `.env` is git-ignored. These settings replace the previous `vite.json`
+  configuration. The dev server fails if the Infinity URL is missing or the port
+  is invalid. Production builds do not require a `.env` file.
 
 - Start the development server:
 
@@ -140,8 +137,15 @@ replace the content of `config.json` with it.
   npm start
   ```
 
-The plugin is served from https://localhost:5173 (visit that page and accept the
-self-signed certificate), but you should access it through the Web App 3 URL.
+The browser opens https://localhost:5173/webapp3/ (adjust the port if
+configured). HTTPS is provided by mkcert; accept or trust its local certificate
+if prompted. The dev server proxies Web App 3 from your Infinity server and
+serves a local `/webapp3/branding/manifest.json` that registers this plugin
+automatically. No branding upload is needed for local development. The manifest
+grants `allow-same-origin`, which lets the plugin display animations over the
+video. The configured port must be available; the server will not silently
+choose another.
+
 For more information about configuring your environment, see the
 [Developer Portal: Setup guide for plugin developers](https://developer.pexip.com/docs/plugins/webapp-3/setup-guide-for-plugin-developers).
 
@@ -161,6 +165,20 @@ npm run build
 
 The package is created in the `dist` folder. Next, create a Web App 3 branding
 and copy the contents of `dist` into it.
+
+The plugin ID is `reactions`. Add an entry to your branding manifest's
+`plugins` array, adjusting `src` to the URL where the plugin is deployed:
+
+```json
+{
+  "id": "reactions",
+  "src": "./reactions/index.html",
+  "sandboxValues": ["allow-same-origin"]
+}
+```
+
+The `allow-same-origin` sandbox value is required so the plugin can access
+the parent page to display reaction animations over the video.
 
 To learn more about deploying plugins in Pexip Infinity, see the
 [Developer Portal](https://developer.pexip.com).
