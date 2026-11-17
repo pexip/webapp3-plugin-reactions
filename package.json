@@ -1,12 +1,11 @@
 {
   "name": "reactions",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "vite",
-    "build": "vite build",
-    "test": "jest --detectOpenHandles --silent"
+    "build": "vite build"
   },
   "keywords": [],
   "author": "",
