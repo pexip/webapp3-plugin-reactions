@@ -7,6 +7,8 @@ import {
 import { CONFIG_FILE, MESSAGE_PROPERTY, RESOURCE_PATH } from './constants'
 import { toolbarIcon } from './toolbaricon'
 
+type Translate = (key: string) => string
+
 /**
  * Read the configuration file from the basePath
  * @param basePath
@@ -31,14 +33,15 @@ export const readConfig = async (basePath: string): Promise<Configuration> => {
  */
 export const readIcon = async (
   basePath: string,
-  resource?: Resource
+  resource: Resource,
+  translate: Translate
 ): Promise<Icon> => {
-  const mainIcon = await fetch(basePath + RESOURCE_PATH + resource?.icon.main)
+  const mainIcon = await fetch(basePath + RESOURCE_PATH + resource.icon.main)
   const mainIconData = await mainIcon.text()
   return {
     main: mainIconData,
     hover: undefined,
-    text: resource?.icon.text ?? ''
+    text: translate(resource.translationKey)
   }
 }
 
@@ -47,12 +50,11 @@ export const readIcon = async (
  * @param obj The object to check
  * @returns True if the object is a valid icon
  */
-const isValidIcon = (obj: any): obj is Icon => {
+const isValidIcon = (obj: any): obj is ResourceIcon => {
   return (
     obj &&
     typeof obj.main === 'string' &&
-    typeof obj.hover === 'string' &&
-    typeof obj.text === 'string'
+    (obj.hover === undefined || typeof obj.hover === 'string')
   )
 }
 
@@ -65,8 +67,10 @@ const isValidResource = (obj: any): obj is Resource => {
   return (
     obj &&
     typeof obj.id === 'string' &&
+    typeof obj.translationKey === 'string' &&
     isValidIcon(obj.icon) &&
-    (typeof obj.source === 'string' || typeof obj.animation === 'string')
+    typeof obj.toastIcon === 'string' &&
+    typeof obj.source === 'string'
   )
 }
 
@@ -78,7 +82,6 @@ const isValidResource = (obj: any): obj is Resource => {
 const isValidConfiguration = (obj: any): obj is Configuration => {
   return (
     obj &&
-    typeof obj.ownReactionText === 'string' &&
     Array.isArray(obj.resources) &&
     obj.resources.every(isValidResource)
   )
@@ -102,15 +105,16 @@ export const getResource = (id: string, configuration: Configuration) => {
  */
 export const createMenuGroup = async (
   basePath: string,
-  configuration: Configuration
+  configuration: Configuration,
+  translate: Translate
 ) => {
   const recordingGroup: RPCCallPayload<'ui:button:add'> = {
     position: 'toolbar',
     icon: { custom: toolbarIcon },
-    tooltip: configuration.tooltip,
+    tooltip: translate('toolbar.tooltip'),
     roles: ['chair', 'guest'],
     group: await Promise.all(
-      await mapResourcesToEntries(basePath, configuration.resources)
+      await mapResourcesToEntries(basePath, configuration.resources, translate)
     )
   }
 
@@ -124,15 +128,16 @@ export const createMenuGroup = async (
  */
 const mapResourcesToEntries = async (
   basePath: string,
-  resources: Resource[]
+  resources: Resource[],
+  translate: Translate
 ) => {
   return resources.map(async (resource) => {
     return {
       id: resource.id,
       position: 'toolbar',
-      icon: { custom: await readIcon(basePath, resource) },
+      icon: { custom: await readIcon(basePath, resource, translate) },
       roles: ['chair', 'guest'],
-      tooltip: resource.icon.text
+      tooltip: translate(resource.translationKey)
     } as unknown as GroupButtonPayload
   })
 }

@@ -7,21 +7,48 @@ import {
   getMessageReactionTypeProperty
 } from './utils'
 import { RESOURCE_PATH } from './constants'
+import { initializeLocalization } from './localization'
 
 const plugin = await registerPlugin({
   id: 'webapp3-plugin-reactions',
   version: 0
 })
 
+let selectedLanguage: string | undefined
+let applyLanguage = (_language: string): Promise<void> => Promise.resolve()
+
+plugin.events.languageSelect.add((language) => {
+  selectedLanguage = language
+  void applyLanguage(language).catch((error) => {
+    console.error('Failed to apply the selected Web App 3 language.', error)
+  })
+})
+
 const basePath = getBasePath()
-
+const i18next = await initializeLocalization(
+  basePath,
+  selectedLanguage ?? navigator.language
+)
 const configuration = await readConfig(basePath)
+if (selectedLanguage) {
+  await i18next.changeLanguage(selectedLanguage)
+}
 
-const menuGroup = await createMenuGroup(basePath, configuration)
+const translate = (key: string) => String(i18next.t(key))
+const menuGroup = await createMenuGroup(basePath, configuration, translate)
 
 const btn = await plugin.ui.addButton(menuGroup).catch((e) => {
   console.warn(e)
 })
+
+applyLanguage = async (language) => {
+  await i18next.changeLanguage(language)
+  await btn?.update(await createMenuGroup(basePath, configuration, translate))
+}
+
+if (selectedLanguage) {
+  await applyLanguage(selectedLanguage)
+}
 
 btn?.onClick.add(async ({ buttonId }) => {
   createReaction(buttonId)
@@ -29,7 +56,9 @@ btn?.onClick.add(async ({ buttonId }) => {
   const resource = getResource(buttonId, configuration)
 
   plugin.ui.showToast({
-    message: configuration.ownReactionText + ' ' + resource?.toastIcon,
+    message: String(
+      i18next.t('toast.ownReaction', { reaction: resource?.toastIcon ?? '' })
+    ),
     isInterrupt: true
   })
 
@@ -75,10 +104,12 @@ await plugin.events.applicationMessage.add((message) => {
   if (reactionType) {
     createReaction(reactionType)
     plugin.ui.showToast({
-      message:
-        message.displayName +
-        ' ' +
-        getResource(reactionType, configuration)?.toastIcon,
+      message: String(
+        i18next.t('toast.otherReaction', {
+          name: message.displayName,
+          reaction: getResource(reactionType, configuration)?.toastIcon ?? ''
+        })
+      ),
       isInterrupt: true
     })
   }

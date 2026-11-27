@@ -1,53 +1,51 @@
 {
-  "tooltip": "Reactions",
-  "ownReactionText": "You",
   "resources": [
     {
       "id": "clap",
+      "translationKey": "reactions.clap",
       "icon": {
         "main": "/icons/clappingIcon.svg",
-        "hover": "/icons/clappingIconHover.svg",
-        "text": "Applause"
+        "hover": "/icons/clappingIconHover.svg"
       },
       "toastIcon": "👏",
       "source": "/animations/clap.gif"
     },
     {
       "id": "love",
+      "translationKey": "reactions.love",
       "icon": {
         "main": "/icons/heartIcon.svg",
-        "hover": "/icons/heartIconHover.svg",
-        "text": "Love"
+        "hover": "/icons/heartIconHover.svg"
       },
       "toastIcon": "❤️",
       "source": "/animations/hearts.gif"
     },
     {
       "id": "laugh",
+      "translationKey": "reactions.laugh",
       "icon": {
         "main": "/icons/laughIcon.svg",
-        "hover": "/icons/laughIconHover.svg",
-        "text": "Laugh"
+        "hover": "/icons/laughIconHover.svg"
       },
       "toastIcon": "😄",
       "source": "/animations/laugh.gif"
     },
     {
       "id": "laughLoud",
+      "translationKey": "reactions.laughLoud",
       "icon": {
         "main": "/icons/laughLoudIcon.svg",
-        "hover": "/icons/laughLoudHover.svg",
-        "text": "Laugh Loud"
+        "hover": "/icons/laughLoudHover.svg"
       },
       "toastIcon": "🤣",
       "source": "/animations/laughLoud.gif"
     },
     {
       "id": "sad",
+      "translationKey": "reactions.sad",
       "icon": {
         "main": "/icons/sadIcon.svg",
-        "hover": "/icons/sadIconHover.svg",
-        "text": "Sad"
+        "hover": "/icons/sadIconHover.svg"
       },
       "toastIcon": "😢",
       "source": "/animations/sad.gif"

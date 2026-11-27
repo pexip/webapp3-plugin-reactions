@@ -10,6 +10,11 @@ interface Icon {
   text: string
 }
 
+interface ResourceIcon {
+  main: string
+  hover?: string
+}
+
 /**
  * The resource interface
  * @param id The id
@@ -17,19 +22,16 @@ interface Icon {
  */
 interface Resource {
   id: string
-  icon: Icon
+  translationKey: string
+  icon: ResourceIcon
   source: string
   toastIcon: string
 }
 
 /**
  * The configuration interface
- * @param ownReactionText The own reaction text
- * @param tooltip The tooltip for the menu bar icon
  * @param resources Array of resources
  */
 interface Configuration {
-  ownReactionText: string,
-  tooltip: string,
   resources: Resource[]
 }

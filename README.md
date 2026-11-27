@@ -54,15 +54,13 @@ no code changes are needed. The plugin reads this file at startup:
 
 ```json
 {
-  "tooltip": "Reactions",
-  "ownReactionText": "You",
   "resources": [
     {
       "id": "clap",
+      "translationKey": "reactions.clap",
       "icon": {
         "main": "/icons/clappingIcon.svg",
-        "hover": "/icons/clappingIconHover.svg",
-        "text": "Applause"
+        "hover": "/icons/clappingIconHover.svg"
       },
       "toastIcon": "👏",
       "source": "/animations/clap.gif"
@@ -71,16 +69,14 @@ no code changes are needed. The plugin reads this file at startup:
 }
 ```
 
-- `tooltip`: Tooltip of the reactions button in the toolbar.
-- `ownReactionText`: Text shown in the toast message of the user who reacted,
-  for example "You 👏".
 - `resources`: List of available reactions. Each one has:
   - `id`: Unique identifier of the reaction. It is sent to the other
     participants.
+  - `translationKey`: i18next key for the localized reaction name. Add this
+    key to every locale file.
   - `icon.main`: SVG icon of the reaction button.
   - `icon.hover`: SVG icon for the hover state (required, but not currently
     used).
-  - `icon.text`: Text shown as the tooltip of the reaction button.
   - `toastIcon`: Emoji shown in the toast messages.
   - `source`: Animation displayed over the video.
 
@@ -91,17 +87,22 @@ To add a new reaction, copy the icons and the animation to
 to `resources`. All participants must use the same configured reactions to see
 each other's reactions.
 
-### Translations
+### Localization
 
-The plugin always reads `config.json`. Translated examples are provided in
-[`german_config.json`](./public/german_config.json) and
-[`spanish_config.json`](./public/spanish_config.json). To use one of them,
-replace the content of `config.json` with it.
+The plugin follows the language selected in Web App 3 and loads translations
+through i18next and its HTTP backend. English, German and Spanish are supported;
+regional variants such as `de-AT` use the matching base language, and other
+languages fall back to English. The browser language is used until Web App 3
+sends its language selection.
 
-> **Note:** Full localization is not supported yet. The plugin does not detect
-> the user's language or switch it dynamically: all participants see the texts
-> from the single `config.json` deployed with the plugin. Localization is
-> planned as a future feature.
+Translations are stored in
+[`public/locales/en/translation.json`](./public/locales/en/translation.json),
+[`public/locales/de/translation.json`](./public/locales/de/translation.json)
+and [`public/locales/es/translation.json`](./public/locales/es/translation.json).
+Toast templates support `{{reaction}}` and `{{name}}` placeholders. When adding
+a configured reaction, give it a unique `translationKey` and add a translation
+for that key to every locale file. To add a language, add its locale file and
+include its language code in the supported languages in `src/localization.ts`.
 
 ## Run for development
 

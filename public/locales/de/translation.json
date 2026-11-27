@@ -1,0 +1,16 @@
+{
+  "toolbar": {
+    "tooltip": "Reaktionen"
+  },
+  "toast": {
+    "ownReaction": "Du hast mit {{reaction}} reagiert",
+    "otherReaction": "{{name}} hat mit {{reaction}} reagiert"
+  },
+  "reactions": {
+    "clap": "Applaus",
+    "love": "Herz",
+    "laugh": "Lachen",
+    "laughLoud": "Laut Lachen",
+    "sad": "Traurig"
+  }
+}

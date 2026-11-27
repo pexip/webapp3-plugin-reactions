@@ -4,11 +4,13 @@
 
 ### Added
 
-- Configurable reactions, icons, animations and text through `config.json`.
-- German and Spanish example configurations.
+- Configurable reactions, icons and animations through `config.json`.
+- Localization that follows the Web App 3 language selection, powered by
+  i18next with English, German and Spanish translations.
+- Configurable translation keys for custom reactions.
 - Local HTTPS development with environment settings, Web App 3/API proxying
   and an automatically generated branding manifest.
-- Documentation for configuration, localization limitations, plugin ID and
+- Documentation for configuration, localization, plugin ID and
   required sandbox permissions.
 
 ### Changed
