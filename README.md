@@ -166,12 +166,12 @@ npm run build
 The package is created in the `dist` folder. Next, create a Web App 3 branding
 and copy the contents of `dist` into it.
 
-The plugin ID is `reactions`. Add an entry to your branding manifest's
+The plugin ID is `webapp3-plugin-reactions`. Add an entry to your branding manifest's
 `plugins` array, adjusting `src` to the URL where the plugin is deployed:
 
 ```json
 {
-  "id": "reactions",
+  "id": "webapp3-plugin-reactions",
   "src": "./reactions/index.html",
   "sandboxValues": ["allow-same-origin"]
 }

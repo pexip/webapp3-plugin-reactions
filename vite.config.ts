@@ -45,7 +45,7 @@ export default defineConfig(({ command, mode, isPreview }) => {
                   translations: {},
                   plugins: [
                     {
-                      id: 'reactions',
+                      id: 'webapp3-plugin-reactions',
                       src: `https://localhost:${port}`,
                       sandboxValues: ['allow-same-origin']
                     }
