@@ -13,6 +13,7 @@
 
 ### Changed
 
+- Renamed the plugin ID to `webapp3-plugin-reactions`.
 - Improved animation positioning for mobile and presentation layouts.
 - Remove reaction animations when their animation finishes.
 - Updated dependencies and TypeScript module resolution.

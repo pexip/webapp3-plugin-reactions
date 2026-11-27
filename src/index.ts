@@ -9,7 +9,7 @@ import {
 import { RESOURCE_PATH } from './constants'
 
 const plugin = await registerPlugin({
-  id: 'reactions',
+  id: 'webapp3-plugin-reactions',
   version: 0
 })
 
